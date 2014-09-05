@@ -100,7 +100,7 @@ module.exports = function(grunt) {
       }
     }
   };
-  grunt.registerMultiTask('ng_sass_colors', 'Converts SASS colors to angular values', function() {
+  grunt.registerMultiTask('ngSassColors', 'Converts SASS colors to angular values', function() {
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
       variablesLike: null,

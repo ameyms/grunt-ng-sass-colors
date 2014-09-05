@@ -17,14 +17,14 @@ Once the plugin has been installed, it may be enabled inside your Gruntfile with
 grunt.loadNpmTasks('grunt-ng-sass-colors');
 ```
 
-## The "ng_sass_colors" task
+## The "ngSassColors" task
 
 ### Overview
-In your project's Gruntfile, add a section named `ng_sass_colors` to the data object passed into `grunt.initConfig()`.
+In your project's Gruntfile, add a section named `ngSassColors` to the data object passed into `grunt.initConfig()`.
 
 ```js
 grunt.initConfig({
-  ng_sass_colors: {
+  ngSassColors: {
     options: {
       // Task-specific options go here.
     },
@@ -37,17 +37,32 @@ grunt.initConfig({
 
 ### Options
 
-#### options.separator
+
+#### options.module
 Type: `String`
-Default value: `',  '`
+*Mandatory* (Default value: `null`)
 
-A string value that is used to do something with whatever.
+Specifies the angular module under which this values provider is to be created.
+This is *mandatory*.
 
-#### options.punctuation
+
+#### options.providerName
 Type: `String`
-Default value: `'.'`
+Default value: `ColorPalette`
 
-A string value that is used to do something else with whatever else.
+Specifies the name to be given to the generated values provider
+
+
+#### options.variablesLike
+Type: `Function` or `RegExp`
+Default value: `null`
+
+
+#### options.quotes
+Type: `String`
+Default value: `'`
+
+Specifies whether generated code will use single or double quotes
 
 ### Usage Examples
 
@@ -56,10 +71,15 @@ In this example, the default options are used to do something with whatever. So 
 
 ```js
 grunt.initConfig({
-  ng_sass_colors: {
-    options: {},
+  ngSassColors: {
+    options: {
+      module: 'ameyms'
+    },
     files: {
-      'dest/default_options': ['src/testing', 'src/123'],
+      'app/scripts/values/colors.js': [
+          'app/styles/my_colors.scss',
+          'app/styles/brand_colors.scss'
+      ],
     },
   },
 });
@@ -70,13 +90,18 @@ In this example, custom options are used to do something else with whatever else
 
 ```js
 grunt.initConfig({
-  ng_sass_colors: {
+  ngSassColors: {
     options: {
-      separator: ': ',
-      punctuation: ' !!!',
+      module: 'ameyms',
+      variablesLike: /color[_\-].+/i,
+      providerName: 'ColorPalette',
+      quotes: '\''
     },
     files: {
-      'dest/default_options': ['src/testing', 'src/123'],
+      'app/scripts/values/colors.js': [
+          'app/styles/my_colors.scss',
+          'app/styles/brand_colors.scss'
+      ],
     },
   },
 });

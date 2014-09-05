@@ -29,8 +29,8 @@ module.exports = function(grunt) {
     },
 
     // Configuration to be run (and then tested).
-    ng_sass_colors: {
-      default_options: {
+    ngSassColors: {
+      default: {
         options: {
           module: 'ameyms'
         },
@@ -38,7 +38,7 @@ module.exports = function(grunt) {
           'tmp/default_options.js': ['test/fixtures/testing1.scss', 'test/fixtures/testing2.scss']
         }
       },
-      custom_options: {
+      custom: {
         options: {
           module: 'ameyms',
           quotes: '"',
@@ -67,7 +67,7 @@ module.exports = function(grunt) {
 
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'ng_sass_colors', 'nodeunit']);
+  grunt.registerTask('test', ['clean', 'ngSassColors', 'nodeunit']);
 
   // By default, lint and run all tests.
   grunt.registerTask('default', ['jshint', 'test']);
