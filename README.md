@@ -40,7 +40,7 @@ grunt.initConfig({
 
 #### options.module
 Type: `String`
-*Mandatory* (Default value: `null`)
+**Mandatory** (Default value: `null`)
 
 Specifies the angular module under which this values provider is to be created.
 This is *mandatory*.
@@ -56,6 +56,23 @@ Specifies the name to be given to the generated values provider
 #### options.variablesLike
 Type: `Function` or `RegExp`
 Default value: `null`
+
+Specified which variables to add to the generated values
+
+
+#### options.stripPrefix
+Type: `String`
+Default value: `null`
+
+Removes the given string prefix from variables before adding them to the generated values provider
+
+
+#### options.transform
+Type: `Function`
+Default value: `null`
+
+Accepts the variable name as input and returns a transformed name that is used as
+'key' in the generated values provider
 
 
 #### options.quotes

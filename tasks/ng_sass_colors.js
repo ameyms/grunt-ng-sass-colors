@@ -18,7 +18,7 @@ module.exports = function(grunt) {
       ngValuePrefixStr, ngValueSuffixStr, ngValueEntryStr,
       definedSymbols, forwardDeclarations, resolvedSymbols,
       buildSymbolTable, initSymbolTable, resolveForwardDeclarations,
-      getColorVariableTester, normalizeName;
+      getColorVariableTester, createNameNormalizer;
 
     ngValuePrefixStr = 'angular.module(<%=quotes%><%= module %><%=quotes%>).values' +
       '(<%=quotes%><%=providerName%><%=quotes%>, {\n';
@@ -41,8 +41,18 @@ module.exports = function(grunt) {
         }
     };
 
-    normalizeName = function(str){
-      return str.replace(/[\-]/g, '_').toUpperCase();
+    createNameNormalizer = function(options){
+      return function(str) {
+        if(grunt.util.kindOf(options.stripPrefix) === 'string') {
+          if(str.indexOf(options.stripPrefix) === 0) {
+            str = str.slice(options.stripPrefix.length);
+          }
+        }
+        if(grunt.util.kindOf(options.transform) === 'function') {
+          str = options.transform(str);
+        }
+        return str.replace(/[\-]/g, '_').toUpperCase();
+      };
     };
 
     initSymbolTable = function() {
@@ -101,14 +111,16 @@ module.exports = function(grunt) {
       variablesLike: null,
       module: null,
       providerName: 'ColorPalette',
-      quotes: '\''
+      quotes: '\'',
+      stripPrefix: null,
+      transform: null
     }),
     templateStr;
 
     // Iterate over all specified file groups.
     this.files.forEach(function(f) {
       // Concat specified files.
-      var isColorVar, k, entry;
+      var isColorVar, normalizeName, k, entry;
       var src = f.src.filter(function(filepath) {
         // Warn on and remove invalid source files (if nonull was set).
         if (!grunt.file.exists(filepath)) {
@@ -124,6 +136,7 @@ module.exports = function(grunt) {
 
 
       isColorVar = getColorVariableTester(options.variablesLike);
+      normalizeName = createNameNormalizer(options);
       initSymbolTable();
       buildSymbolTable(src, isColorVar);
 

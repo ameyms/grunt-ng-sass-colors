@@ -1,7 +1,7 @@
 angular.module("ameyms").values("ColorPalette", {
-COLOR_ONE: "#FFF",
-COLOR_TWO: "rgba(1, 4, 455)",
-COLOR_THIS_IS_HYPHENATED: "steelblue",
-COLOR_THREE: "#FFF",
+ONE: "#FFF",
+TWO: "rgba(1, 4, 455)",
+THIS_IS_HYPHENATED: "steelblue",
+THREE: "#FFF",
 
 });

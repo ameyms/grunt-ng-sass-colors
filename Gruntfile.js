@@ -42,6 +42,10 @@ module.exports = function(grunt) {
         options: {
           module: 'ameyms',
           quotes: '"',
+          stripPrefix: 'color_',
+          transform: function(name) {
+            return name.replace(/^color-(.+)/, '$1');
+          },
           variablesLike: /color[_\-].+/i
         },
         files: {
