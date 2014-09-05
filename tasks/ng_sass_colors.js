@@ -51,7 +51,7 @@ module.exports = function(grunt) {
       forwardDeclarations = {};
       resolvedSymbols = {};
     };
-    buildSymbolTable = function(text, isColorVar) {
+    buildSymbolTable = function(text) {
 
       var matches, n, v, k;
 
@@ -60,9 +60,7 @@ module.exports = function(grunt) {
           n = matches[1];
           v = matches[2];
 
-          if(isColorVar(n)) {
-            definedSymbols[n] = v;
-          }
+          definedSymbols[n] = v;
       }
 
       // Then try to find forward declared and references
@@ -70,9 +68,6 @@ module.exports = function(grunt) {
         n = matches[1];
         v = matches[2];
 
-        if(!isColorVar(n)) {
-          continue;
-        }
         if(definedSymbols[v]) {
           resolvedSymbols[n] = {
             value: definedSymbols[v],
@@ -135,8 +130,11 @@ module.exports = function(grunt) {
       resolveForwardDeclarations();
 
       templateStr = grunt.template.process(ngValuePrefixStr, {data:options});
-      //forwardDeclarations, resolvedSymbols,
+
       for(k in definedSymbols) {
+        if(!isColorVar(k)) {
+          continue;
+        }
         entry = {
           key: normalizeName(k),
           value: definedSymbols[k],
@@ -147,6 +145,9 @@ module.exports = function(grunt) {
       }
 
       for(k in forwardDeclarations) {
+        if(!isColorVar(k)) {
+          continue;
+        }
         entry = {
           key: normalizeName(k),
           value: forwardDeclarations[k].value,
@@ -157,6 +158,9 @@ module.exports = function(grunt) {
       }
 
       for(k in resolvedSymbols) {
+        if(!isColorVar(k)) {
+          continue;
+        }
         entry = {
           key: normalizeName(k),
           value: resolvedSymbols[k].value,
