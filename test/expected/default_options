@@ -1,0 +1,8 @@
+angular.module('ameyms').values('ColorPalette', {
+COLOR_ONE: '#FFF',
+COLOR_TWO: 'rgba(1, 4, 455)',
+COLOR_THIS_IS_HYPHENATED: 'steelblue',
+NOT_VALID_COLOR: 'firebrick',
+COLOR_THREE: '#FFF',
+
+});
