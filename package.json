@@ -1,8 +1,8 @@
 {
   "name": "grunt-ng-sass-colors",
   "description": "Converts SASS colors to angular values",
-  "version": "0.2.0",
-  "homepage": "https://github.com/amey/grunt-ng-sass-colors",
+  "version": "0.2.1",
+  "homepage": "https://github.com/ameyms/grunt-ng-sass-colors",
   "author": {
     "name": "Amey Sakhadeo",
     "email": "me@ameyms.com",
@@ -10,15 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/amey/grunt-ng-sass-colors.git"
+    "url": "git://github.com/ameyms/grunt-ng-sass-colors.git"
   },
   "bugs": {
-    "url": "https://github.com/amey/grunt-ng-sass-colors/issues"
+    "url": "https://github.com/ameyms/grunt-ng-sass-colors/issues"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/amey/grunt-ng-sass-colors/blob/master/LICENSE-MIT"
+      "url": "https://github.com/ameyms/grunt-ng-sass-colors/blob/master/LICENSE-MIT"
     }
   ],
   "engines": {

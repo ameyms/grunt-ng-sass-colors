@@ -13,83 +13,83 @@ module.exports = function(grunt) {
   // Please see the Grunt documentation for more information regarding task
   // creation: http://gruntjs.com/creating-tasks
 
-    var rDefinedVars = /\$([\w\-]+)\s*\:\s*((?:#[A-Fa-f0-9]{3,6})|(?:rgba?\((?:\d+(?:\s*,\s*\d+){2,3})\))|(?:[A-Za-z]+))\s*;/g,
-      rReferenceVars = /\$([\w\-]+)\s*\:\s*(?:\$([\w\-]+))\s*;/g,
-      ngValuePrefixStr, ngValueSuffixStr, ngValueEntryStr,
-      definedSymbols, forwardDeclarations, resolvedSymbols,
-      buildSymbolTable, initSymbolTable, resolveForwardDeclarations,
-      getColorVariableTester, createNameNormalizer;
+  var rDefinedVars = /\$([\w\-]+)\s*\:\s*((?:#[A-Fa-f0-9]{3,6})|(?:rgba?\((?:\d+(?:\s*,\s*\d+){2,3})\))|(?:[A-Za-z]+))\s*;/g,
+    rReferenceVars = /\$([\w\-]+)\s*\:\s*(?:\$([\w\-]+))\s*;/g,
+    ngValuePrefixStr, ngValueSuffixStr, ngValueEntryStr,
+    definedSymbols, forwardDeclarations, resolvedSymbols,
+    buildSymbolTable, initSymbolTable, resolveForwardDeclarations,
+    getColorVariableTester, createNameNormalizer;
 
-    ngValuePrefixStr = 'angular.module(<%=quotes%><%= module %><%=quotes%>).values' +
-      '(<%=quotes%><%=providerName%><%=quotes%>, {\n';
+  ngValuePrefixStr = '// Generated using grunt-ng-sass-colors\n' +
+    'angular.module(<%=quotes%><%= module %><%=quotes%>).value' +
+    '(<%=quotes%><%=providerName%><%=quotes%>, {\n';
 
-    ngValueSuffixStr = '\n});\n';
-    ngValueEntryStr = '<%= key %>: <%=quotes%><%=value%><%=quotes%>,\n';
+  ngValueSuffixStr = '\n\n});\n';
+  ngValueEntryStr = '\n  <%= key %>: <%=quotes%><%=value%><%=quotes%>,';
 
-    getColorVariableTester = function(tester) {
+  getColorVariableTester = function(tester) {
 
-        if(grunt.util.kindOf(tester) === 'function') {
-            return tester;
-        } else if( grunt.util.kindOf(tester) === 'regexp' ){
-          return function(variableName) {
-            return !!tester.test(variableName);
-          };
-        } else {
-          return function(){
-            return true;
-          };
-        }
-    };
-
-    createNameNormalizer = function(options){
-      return function(str) {
-        if(grunt.util.kindOf(options.stripPrefix) === 'string') {
-          if(str.indexOf(options.stripPrefix) === 0) {
-            str = str.slice(options.stripPrefix.length);
-          }
-        }
-        if(grunt.util.kindOf(options.transform) === 'function') {
-          str = options.transform(str);
-        }
-        return str.replace(/[\-]/g, '_').toUpperCase();
-      };
-    };
-
-    initSymbolTable = function() {
-
-      definedSymbols = {};
-      forwardDeclarations = {};
-      resolvedSymbols = {};
-    };
-    buildSymbolTable = function(text) {
-
-      var matches, n, v, k;
-
-      // First, find defined variables
-      while ((matches = rDefinedVars.exec(text)) !== null ) {
-          n = matches[1];
-          v = matches[2];
-
-          definedSymbols[n] = v;
+      if(grunt.util.kindOf(tester) === 'function') {
+          return tester;
+      } else if( grunt.util.kindOf(tester) === 'regexp' ){
+        return function(variableName) {
+          return !!tester.test(variableName);
+        };
+      } else {
+        return function(){
+          return true;
+        };
       }
+  };
 
-      // Then try to find forward declared and references
-      while ((matches = rReferenceVars.exec(text)) !== null ) {
+  createNameNormalizer = function(options){
+    return function(str) {
+      if(grunt.util.kindOf(options.stripPrefix) === 'string') {
+        if(str.indexOf(options.stripPrefix) === 0) {
+          str = str.slice(options.stripPrefix.length);
+        }
+      }
+      if(grunt.util.kindOf(options.transform) === 'function') {
+        str = options.transform(str);
+      }
+      return str.replace(/[\-]/g, '_').toUpperCase();
+    };
+  };
+
+  initSymbolTable = function() {
+
+    definedSymbols = {};
+    forwardDeclarations = {};
+    resolvedSymbols = {};
+  };
+  buildSymbolTable = function(text) {
+
+    var matches, n, v, k;
+
+    // First, find defined variables
+    while ((matches = rDefinedVars.exec(text)) !== null ) {
         n = matches[1];
         v = matches[2];
 
-        if(definedSymbols[v]) {
-          resolvedSymbols[n] = {
-            value: definedSymbols[v],
-            via: v
-          };
-        } else {
-          forwardDeclarations[n] = {
-            value: null,
-            via: v
-          };
-        }
+        definedSymbols[n] = v;
+    }
 
+    // Then try to find forward declared and references
+    while ((matches = rReferenceVars.exec(text)) !== null ) {
+      n = matches[1];
+      v = matches[2];
+
+      if(definedSymbols[v]) {
+        resolvedSymbols[n] = {
+          value: definedSymbols[v],
+          via: v
+        };
+      } else {
+        forwardDeclarations[n] = {
+          value: null,
+          via: v
+        };
+      }
     }
   };
 
@@ -182,7 +182,7 @@ module.exports = function(grunt) {
 
         templateStr += grunt.template.process(ngValueEntryStr,{data:entry});
       }
-
+      templateStr = templateStr.slice(0,templateStr.length-1);
       templateStr += grunt.template.process(ngValueSuffixStr, {data:options});
       // Write the destination file.
       grunt.file.write(f.dest, templateStr);

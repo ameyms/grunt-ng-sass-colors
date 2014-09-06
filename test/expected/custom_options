@@ -1,7 +1,9 @@
-angular.module("ameyms").values("ColorPalette", {
-ONE: "#FFF",
-TWO: "rgba(1, 4, 455)",
-THIS_IS_HYPHENATED: "steelblue",
-THREE: "#FFF",
+// Generated using grunt-ng-sass-colors
+angular.module("ameyms").value("ColorPalette", {
+
+  ONE: "#FFF",
+  TWO: "rgba(1, 4, 455)",
+  THIS_IS_HYPHENATED: "steelblue",
+  THREE: "#FFF"
 
 });
