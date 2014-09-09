@@ -1,7 +1,7 @@
 {
   "name": "grunt-ng-sass-colors",
   "description": "Converts SASS colors to angular values",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "homepage": "https://github.com/ameyms/grunt-ng-sass-colors",
   "author": {
     "name": "Amey Sakhadeo",
