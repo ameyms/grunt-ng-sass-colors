@@ -29,27 +29,27 @@ module.exports = function(grunt) {
 
   getColorVariableTester = function(tester) {
 
-      if(grunt.util.kindOf(tester) === 'function') {
+      if (grunt.util.kindOf(tester) === 'function') {
           return tester;
-      } else if( grunt.util.kindOf(tester) === 'regexp' ){
+      } else if ( grunt.util.kindOf(tester) === 'regexp' ) {
         return function(variableName) {
           return !!tester.test(variableName);
         };
       } else {
-        return function(){
+        return function() {
           return true;
         };
       }
   };
 
-  createNameNormalizer = function(options){
+  createNameNormalizer = function(options) {
     return function(str) {
-      if(grunt.util.kindOf(options.stripPrefix) === 'string') {
-        if(str.indexOf(options.stripPrefix) === 0) {
+      if (grunt.util.kindOf(options.stripPrefix) === 'string') {
+        if (str.indexOf(options.stripPrefix) === 0) {
           str = str.slice(options.stripPrefix.length);
         }
       }
-      if(grunt.util.kindOf(options.transform) === 'function') {
+      if (grunt.util.kindOf(options.transform) === 'function') {
         str = options.transform(str);
       }
       return str.replace(/[\-]/g, '_').toUpperCase();
@@ -79,7 +79,7 @@ module.exports = function(grunt) {
       n = matches[1];
       v = matches[2];
 
-      if(definedSymbols[v]) {
+      if (definedSymbols[v]) {
         resolvedSymbols[n] = {
           value: definedSymbols[v],
           via: v
@@ -95,10 +95,10 @@ module.exports = function(grunt) {
 
   resolveForwardDeclarations = function() {
     var k, n, v;
-    for(k in forwardDeclarations) {
-      if(forwardDeclarations.hasOwnProperty(k)) {
+    for (k in forwardDeclarations) {
+      if (forwardDeclarations.hasOwnProperty(k)) {
         n = forwardDeclarations[k].via;
-        if(definedSymbols[n]) {
+        if (definedSymbols[n]) {
           v = definedSymbols[n];
           forwardDeclarations[k].value = v;
         }
@@ -120,8 +120,9 @@ module.exports = function(grunt) {
     // Iterate over all specified file groups.
     this.files.forEach(function(f) {
       // Concat specified files.
-      var isColorVar, normalizeName, k, entry;
-      var src = f.src.filter(function(filepath) {
+      var isColorVar, normalizeName, k, entry, src;
+
+      src = f.src.filter(function(filepath) {
         // Warn on and remove invalid source files (if nonull was set).
         if (!grunt.file.exists(filepath)) {
           grunt.log.warn('Source file "' + filepath + '" not found.');
@@ -134,7 +135,6 @@ module.exports = function(grunt) {
         return grunt.file.read(filepath);
       }).join(grunt.util.normalizelf(''));
 
-
       isColorVar = getColorVariableTester(options.variablesLike);
       normalizeName = createNameNormalizer(options);
       initSymbolTable();
@@ -142,10 +142,10 @@ module.exports = function(grunt) {
 
       resolveForwardDeclarations();
 
-      templateStr = grunt.template.process(ngValuePrefixStr, {data:options});
+      templateStr = grunt.template.process(ngValuePrefixStr, { data:options });
 
-      for(k in definedSymbols) {
-        if(!isColorVar(k)) {
+      for (k in definedSymbols) {
+        if (!isColorVar(k)) {
           continue;
         }
         entry = {
@@ -154,11 +154,11 @@ module.exports = function(grunt) {
           quotes: options.quotes
         };
 
-        templateStr += grunt.template.process(ngValueEntryStr,{data:entry});
+        templateStr += grunt.template.process(ngValueEntryStr, { data:entry });
       }
 
-      for(k in forwardDeclarations) {
-        if(!isColorVar(k)) {
+      for (k in forwardDeclarations) {
+        if (!isColorVar(k)) {
           continue;
         }
         entry = {
@@ -167,11 +167,11 @@ module.exports = function(grunt) {
           quotes: options.quotes
         };
 
-        templateStr += grunt.template.process(ngValueEntryStr,{data:entry});
+        templateStr += grunt.template.process(ngValueEntryStr, { data:entry } );
       }
 
-      for(k in resolvedSymbols) {
-        if(!isColorVar(k)) {
+      for (k in resolvedSymbols) {
+        if (!isColorVar(k)) {
           continue;
         }
         entry = {
@@ -180,10 +180,10 @@ module.exports = function(grunt) {
           quotes: options.quotes
         };
 
-        templateStr += grunt.template.process(ngValueEntryStr,{data:entry});
+        templateStr += grunt.template.process(ngValueEntryStr, { data:entry });
       }
-      templateStr = templateStr.slice(0,templateStr.length-1);
-      templateStr += grunt.template.process(ngValueSuffixStr, {data:options});
+      templateStr = templateStr.slice(0, templateStr.length - 1);
+      templateStr += grunt.template.process(ngValueSuffixStr, { data:options });
       // Write the destination file.
       grunt.file.write(f.dest, templateStr);
 
